@@ -36,6 +36,20 @@ This project is a Flask-based web application that integrates browser automation
    python app.py
    ```
 
+## Running with Docker
+
+1. Build the Docker image:
+   ```bash
+   docker build -t browser-use-flask-playwright .
+   ```
+
+2. Run the Docker container:
+   ```bash
+   docker run -p 5000:5000 browser-use-flask-playwright
+   ```
+
+3. Access the application at `http://localhost:5000`.
+
 ## Usage
 
 1. Open the web interface at `http://127.0.0.1:5000`.
@@ -43,6 +57,16 @@ This project is a Flask-based web application that integrates browser automation
 3. Optionally, enable headless mode.
 4. Submit the prompt and view the live output.
 5. Update the Gemini API key using the provided form.
+
+- **Browse with AI**: The application uses the `browser-use` Python library to enable AI-driven browsing. The agent can navigate to websites, interact with elements, and extract information based on user prompts.
+
+- **Starting the Agent**: Input your prompt in the web interface, and the agent will execute the task, starting with navigating to `google.com` before proceeding with the prompt.
+
+- **Updating API Key**: Use the web interface to update the Gemini API key dynamically.
+
+- **Live Output**: Monitor the agent's progress in real-time through the terminal output displayed on the web interface.
+
+- **Headless Mode**: Toggle headless mode for browser automation directly from the web interface.
 
 ## Example Prompt
 

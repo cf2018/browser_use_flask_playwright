@@ -37,8 +37,16 @@ def run_agent_task(task, headless, output_callback):
             browser_config = BrowserConfig(
                 browser_type='chromium',
                 headless=headless,
+                base_url='https://example.com',  # Set a base URL for navigation
+                allowed_domains=['*'],  # Restrict navigation to trusted domains
+                default_navigation_timeout=10000,  # Set navigation timeout to 30 seconds
+                minimum_wait_page_load_time=0.25,  # Ensure a baseline wait time for page load
             )
             browser = Browser(config=browser_config)
+            page = await browser.new_tab()  # Create a new tab object
+            #await page.goto("https://www.google.com")  # Navigate using the tab object
+            logging.info("Navigated to google.com")
+
             agent = Agent(
                 task=task,
                 llm=llm,
@@ -47,18 +55,9 @@ def run_agent_task(task, headless, output_callback):
             logging.info(f"Agent initialized with task: {task}")
             print("Starting agent...\n")
 
-            # Extract target URL from the prompt
-            target_url = task.split("start browser on ")[1].split("\n")[0].strip()
-            logging.info(f"Navigating to: {target_url}")
-            await browser.navigate(target_url)
 
             # Execute the prompt directly
             history = await agent.run()
-
-            # Debugging navigation state
-            current_page = await browser.get_current_page()
-            current_url = current_page.url if current_page else "Unknown"
-            logging.info(f"Current browser URL: {current_url}")
 
             # Print the final result
             print("\n--- FINAL RESULT ---\n")
@@ -110,5 +109,14 @@ def update_api_key():
         return jsonify({"status": "success", "message": "API key updated."})
     return jsonify({"status": "error", "message": "API key not provided."})
 
+@app.route("/update_model", methods=["POST"])
+def update_model():
+    selected_model = request.form.get("gemini_model")
+    if selected_model:
+        os.environ["GEMINI_MODEL"] = selected_model
+        logging.info(f"Gemini model updated to: {selected_model}")
+        return jsonify({"status": "success", "message": "Model updated."})
+    return jsonify({"status": "error", "message": "Model not provided."})
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

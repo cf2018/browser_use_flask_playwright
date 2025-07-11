@@ -28,7 +28,18 @@
     <form id="api-key-form" method="POST" action="/update_api_key" class="mb-4">
         <div class="mb-3">
             <label for="api_key" class="form-label">Gemini API Key</label>
-            <input type="text" class="form-control" id="api_key" name="api_key" placeholder="Enter your Gemini API key">
+            <input type="password" class="form-control" id="api_key" name="api_key" placeholder="Enter your Gemini API key">
+        </div>
+        <div class="mb-3">
+            <label for="gemini_model" class="form-label">Gemini Model</label>
+            <select class="form-select" id="gemini_model" name="gemini_model">
+                <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash (Default)</option>
+                <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+                <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite</option>
+                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash-Lite</option>
+                <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Update API Key</button>
     </form>
@@ -94,6 +105,37 @@ $(function() {
         clearInterval(interval);
     });
 });
+</script>
+<script>
+    const apiKeyForm = document.getElementById('api-key-form');
+    const apiKeyMessage = document.createElement('div');
+    apiKeyMessage.className = 'alert alert-success mt-3';
+    apiKeyMessage.style.display = 'none';
+    apiKeyForm.appendChild(apiKeyMessage);
+
+    apiKeyForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(apiKeyForm);
+        const response = await fetch('/update_api_key', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+            apiKeyMessage.textContent = data.message;
+            apiKeyMessage.style.display = 'block';
+            setTimeout(() => {
+                apiKeyMessage.style.display = 'none';
+            }, 3000);
+        } else {
+            apiKeyMessage.textContent = data.message;
+            apiKeyMessage.className = 'alert alert-danger mt-3';
+            apiKeyMessage.style.display = 'block';
+            setTimeout(() => {
+                apiKeyMessage.style.display = 'none';
+            }, 3000);
+        }
+    });
 </script>
 </body>
 </html>
