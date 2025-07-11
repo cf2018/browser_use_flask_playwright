@@ -1,0 +1,25 @@
+# Ignore Python virtual environment
+venv/
+
+# Ignore environment variables file
+.env
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore temporary files
+*.tmp
+*.log
+*.swp
+
+# Ignore Playwright browser cache
+playwright/.cache/
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
