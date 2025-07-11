@@ -23,6 +23,7 @@ This project is a Flask-based web application that integrates browser automation
    python -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
+   playwright install
    ```
 
 3. Set up the `.env` file:
